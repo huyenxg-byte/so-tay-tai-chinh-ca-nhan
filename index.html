@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ Tay Tài Chính Thông Minh AI - Phiên Bản V134-v4 (Tự Động Nhảy Số Tức Thì)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 18px;
+            background-color: #F1F5F9;
+            color: #1E293B;
+            line-height: 1.5;
+            padding-bottom: 70px;
+        }
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        header {
+            background: linear-gradient(135deg, #1E3A8A, #1D4ED8);
+            color: #FFFFFF;
+            padding: 16px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-title h1 {
+            font-size: 23px;
+            font-weight: 800;
+        }
+        .header-title p {
+            font-size: 15px;
+            color: #DBEAFE;
+        }
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            border: 1px solid #CBD5E1;
+            margin-top: 18px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            font-size: 17px;
+            font-weight: 800;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.15s ease;
+            user-select: none;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn-amber { background-color: #F59E0B; color: #0F172A; }
+        .btn-amber:hover { background-color: #D97706; }
+        .btn-green { background-color: #059669; color: #FFFFFF; }
+        .btn-green:hover { background-color: #047857; }
+        .btn-red { background-color: #DC2626; color: #FFFFFF; }
+        .btn-red:hover { background-color: #B91C1C; }
+        .btn-blue { background-color: #1D4ED8; color: #FFFFFF; }
+        .btn-blue:hover { background-color: #1E40AF; }
+        .btn-gray { background-color: #E2E8F0; color: #1E293B; }
+        .btn-gray:hover { background-color: #CBD5E1; }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 16px;
+            margin-top: 18px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 3 Ô TỔNG TIỀN TRÊN CÙNG - NỔI BẬT, TỰ ĐỘNG NHẢY SỐ KHI GÕ */
+        .stat-box {
+            border-radius: 16px;
+            padding: 18px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
+        }
+        .stat-thu { border-left: 10px solid #10B981; background: #ECFDF5; }
+        .stat-chi { border-left: 10px solid #EF4444; background: #FEF2F2; }
+        .stat-du  { border-left: 10px solid #2563EB; background: #EFF6FF; }
+        .stat-am  { border-left: 10px solid #E11D48; background: #FFF1F2; }
+
+        .stat-label {
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #334155;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            margin: 6px 0;
+        }
+        .stat-sub {
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .live-preview-tag {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 800;
+            background: #FEF08A;
+            color: #854D0E;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: #1E293B;
+            font-size: 17px;
+        }
+        .input-control {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 18px;
+            font-weight: 700;
+            border: 2px solid #94A3B8;
+            border-radius: 10px;
+            background-color: #FFFFFF;
+            color: #0F172A;
+        }
+        .input-control:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+        }
+        .quick-money-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .tag-btn {
+            background: #F1F5F9;
+            border: 1px solid #94A3B8;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            color: #0F172A;
+        }
+        .tag-btn:hover {
+            background: #DBEAFE;
+            border-color: #2563EB;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            background-color: #1E3A8A;
+            color: #FFFFFF;
+            padding: 13px 12px;
+            font-size: 16px;
+            font-weight: 800;
+        }
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #CBD5E1;
+            font-size: 17px;
+            vertical-align: middle;
+        }
+        .row-thu { background-color: #ECFDF5; }
+        .row-chi { background-color: #FEF2F2; }
+        .row-du  { background-color: #EFF6FF; }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+        .badge-thu { background: #A7F3D0; color: #065F46; }
+        .badge-chi { background: #FECACA; color: #991B1B; }
+        .badge-du  { background: #BFDBFE; color: #1E40AF; }
+
+        .bar-container {
+            width: 100%;
+            background: #E2E8F0;
+            height: 22px;
+            border-radius: 11px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563EB, #06B6D4);
+            border-radius: 11px;
+        }
+
+        .status-banner {
+            background: #FEF3C7;
+            border: 2px solid #F59E0B;
+            color: #92400E;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <div class="header-title">
+                <h1>📒 SỔ TAY TÀI CHÍNH THÔNG MINH AI - V134 (Bản v4 Tự Động Nhảy Số)</h1>
+                <p>Gõ tiền đến đâu — Ô Tổng Thu, Tổng Chi & Số Dư tự nhảy số đến đó • Hiển thị toàn bộ sổ trên 1 màn hình</p>
+            </div>
+            <div>
+                <span style="background:#10B981; color:#FFFFFF; padding:6px 14px; border-radius:20px; font-weight:800; font-size:15px;">
+                    ⚡ Tự Động Nhảy Số Tức Thì
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- THANH THÔNG BÁO VÀ CHỌN THÁNG -->
+        <div class="status-banner">
+            <span id="statusText">💡 Mẹo: Khi Cô gõ số tiền vào ô Dư Đầu Kỳ, Tiền Thu hoặc Tiền Chi bên dưới, 3 ô Tổng Tiền bên dưới sẽ TỰ ĐỘNG NHẢY SỐ NGAY LẬP TỨC!</span>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <label for="filterMonth" style="font-weight:800; color:#1E3A8A;">📅 Tháng đang xem:</label>
+                <input type="month" id="filterMonth" value="2026-10" class="input-control" style="width:auto; padding:6px 12px; font-size:17px;">
+                <button type="button" id="btnVeThangNay" class="btn btn-blue" style="padding:8px 14px; font-size:15px;">Về Tháng Này</button>
+            </div>
+        </div>
+
+        <!-- 3 Ô TỔNG HỢP SỐ TIỀN TO RÕ (TỰ ĐỘNG CẬP NHẬT NGAY KHI GÕ PHÍM) -->
+        <div class="grid-3">
+            <div class="stat-box stat-thu">
+                <div class="stat-label">➕ TỔNG TIỀN VÀO (+ DƯ ĐẦU KỲ)</div>
+                <div class="stat-value" style="color: #047857;" id="statTongThu">0 đ</div>
+                <div class="stat-sub" style="color: #065F46;" id="statChiTietThu">Thu đã lưu: 0 đ | Dư đầu kỳ: 0 đ</div>
+                <div id="liveThuPreview" class="live-preview-tag" style="display:none;">Đang gõ thêm: +0 đ</div>
+            </div>
+
+            <div class="stat-box stat-chi">
+                <div class="stat-label">➖ TỔNG TIỀN RA (ĐÃ CHI TIÊU)</div>
+                <div class="stat-value" style="color: #DC2626;" id="statTongChi">0 đ</div>
+                <div class="stat-sub" style="color: #991B1B;" id="statSoKhoanChi">Đã lưu 0 khoản chi trong tháng</div>
+                <div id="liveChiPreview" class="live-preview-tag" style="display:none;">Đang gõ thêm: -0 đ</div>
+            </div>
+
+            <div class="stat-box stat-du" id="boxConLai">
+                <div class="stat-label">💰 SỐ DƯ CUỐI KỲ (CÒN DƯ / BỊ ÂM)</div>
+                <div class="stat-value" style="color: #1D4ED8;" id="statConLai">0 đ</div>
+                <div class="stat-sub" style="color: #1E40AF;" id="statDanhGia">⚖️ Đang tính toán...</div>
+            </div>
+        </div>
+
+        <!-- MỤC 1: NHẬP SỐ TIỀN DƯ ĐẦU KỲ (GÕ ĐẾN ĐÂU TỰ CỘNG VÀO TỔNG ĐẾN ĐÓ) -->
+        <div class="card" style="background: #EFF6FF; border: 2px solid #60A5FA;">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;">
+                <div style="flex: 1; min-width: 280px;">
+                    <h3 style="font-size: 19px; font-weight: 800; color: #1E3A8A;">🏦 1. MỤC SỐ TIỀN DƯ ĐẦU KỲ (TIỀN THÁNG TRƯỚC CÒN DƯ CHUYỂN SANG)</h3>
+                    <p style="font-size: 15px; color: #334155;">Cô gõ số tiền vào ô bên cạnh, cột <b>Tổng Tiền Vào</b> và <b>Số Dư</b> ở trên sẽ tự động cộng ngay lập tức:</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="inputSoDuDauKy" value="0" placeholder="Ví dụ: 1.500.000" class="input-control" style="width: 220px; text-align: right; border-color: #2563EB; font-size: 21px; color: #1E3A8A;">
+                    <button type="button" id="btnXoaDuDauKy" class="btn btn-gray" style="padding: 11px 14px;">Đặt về 0</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MỤC 2: HAI KHUNG NHẬP TRỰC TIẾP: DÒNG TIỀN VÀO (THU) & DÒNG TIỀN RA (CHI) -->
+        <div class="grid-2">
+
+            <!-- KHUNG TRÁI: DÒNG TIỀN VÀO (THU) -->
+            <div class="card" style="border-top: 8px solid #10B981; margin-top: 0;">
+                <h2 style="font-size: 21px; font-weight: 800; color: #065F46; margin-bottom: 12px;">
+                    ➕ 2. NHẬP DÒNG TIỀN VÀO (THU NHẬP)
+                </h2>
+
+                <div class="form-group">
+                    <label for="thuAmount">Số tiền thu vào (VNĐ) — <i>Gõ vào là ô Tổng Thu ở trên tự nhảy số</i>:</label>
+                    <input type="text" id="thuAmount" placeholder="Gõ số tiền, ví dụ: 6.500.000" class="input-control" style="border-color: #10B981; font-size: 22px; color: #065F46;">
+                    <div class="quick-money-tags">
+                        <span style="font-size: 14px; font-weight: 800; color: #475569; align-self: center;">Chọn nhanh:</span>
+                        <button type="button" class="tag-btn" data-target="thuAmount" data-val="500.000">500.000</button>
+                        <button type="button" class="tag-btn" data-target="thuAmount" data-val="1.000.000">1.000.000</button>
+                        <button type="button" class="tag-btn" data-target="thuAmount" data-val="2.000.000">2.000.000</button>
+                        <button type="button" class="tag-btn" data-target="thuAmount" data-val="5.000.000">5.000.000</button>
+                        <button type="button" class="tag-btn" data-target="thuAmount" data-val="7.000.000">7.000.000</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="thuCategory">Loại tiền thu vào:</label>
+                    <select id="thuCategory" class="input-control">
+                        <option value="Lương / Phụ cấp">💰 Lương / Phụ cấp giảng dạy</option>
+                        <option value="Tiền thưởng / Khuyến khích">🏆 Tiền thưởng / Chuyên đề</option>
+                        <option value="Gia đình / Con cháu biếu tặng">🎁 Gia đình / Con cháu biếu tặng</option>
+                        <option value="Bán hàng / Thu nhập thêm">🛒 Bán hàng / Thu nhập thêm</option>
+                        <option value="Lãi tiết kiệm">📈 Lãi tiết kiệm ngân hàng</option>
+                        <option value="Khoản thu khác">➕ Khoản thu khác</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label for="thuDate">Ngày nhận:</label>
+                        <input type="date" id="thuDate" value="2026-10-21" class="input-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="thuNote">Ghi chú thêm:</label>
+                        <input type="text" id="thuNote" placeholder="VD: Nhận lương tháng 10..." class="input-control">
+                    </div>
+                </div>
+
+                <button type="button" id="btnLuuThu" class="btn btn-green" style="width: 100%; font-size: 19px; padding: 14px;">
+                    ✅ GHI VÀO SỔ KHOẢN THU NÀY (Hoặc ấn Enter)
+                </button>
+            </div>
+
+            <!-- KHUNG PHẢI: DÒNG TIỀN RA (CHI) -->
+            <div class="card" style="border-top: 8px solid #EF4444; margin-top: 0;">
+                <h2 style="font-size: 21px; font-weight: 800; color: #991B1B; margin-bottom: 12px;">
+                    ➖ 3. NHẬP DÒNG TIỀN RA (CHI TIÊU)
+                </h2>
+
+                <div class="form-group">
+                    <label for="chiAmount">Số tiền chi ra (VNĐ) — <i>Gõ vào là ô Tổng Chi & Số Dư tự nhảy số</i>:</label>
+                    <input type="text" id="chiAmount" placeholder="Gõ số tiền, ví dụ: 180.000" class="input-control" style="border-color: #EF4444; font-size: 22px; color: #DC2626;">
+                    <div class="quick-money-tags">
+                        <span style="font-size: 14px; font-weight: 800; color: #475569; align-self: center;">Chọn nhanh:</span>
+                        <button type="button" class="tag-btn" data-target="chiAmount" data-val="30.000">30.000</button>
+                        <button type="button" class="tag-btn" data-target="chiAmount" data-val="50.000">50.000</button>
+                        <button type="button" class="tag-btn" data-target="chiAmount" data-val="100.000">100.000</button>
+                        <button type="button" class="tag-btn" data-target="chiAmount" data-val="200.000">200.000</button>
+                        <button type="button" class="tag-btn" data-target="chiAmount" data-val="500.000">500.000</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="chiCategory">Loại tiền chi ra:</label>
+                    <select id="chiCategory" class="input-control">
+                        <option value="Ăn uống, Đi chợ">🥩 Ăn uống, Đi chợ hàng ngày</option>
+                        <option value="Điện, Nước, Gas, Mạng">💡 Tiền Điện, Nước, Gas, Điện thoại</option>
+                        <option value="Thuốc men, Sức khỏe">💊 Thuốc men, Y tế, Chăm sóc sức khỏe</option>
+                        <option value="Hiếu hỉ, Đám cưới, Quà cáp">💌 Hiếu hỉ, Mừng cưới, Thăm hỏi</option>
+                        <option value="Xăng xe, Đi lại">🛵 Đổ xăng, Sửa xe, Đi lại</option>
+                        <option value="Mua sắm đồ gia đình">🛍️ Mua sắm quần áo, Đồ gia dụng</option>
+                        <option value="Chi cho con cái / Học tập">📚 Chi cho con cái / Sách vở</option>
+                        <option value="Khoản chi khác">➖ Khoản chi tiêu khác</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label for="chiDate">Ngày chi:</label>
+                        <input type="date" id="chiDate" value="2026-10-21" class="input-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="chiNote">Ghi chú thêm:</label>
+                        <input type="text" id="chiNote" placeholder="VD: Mua thịt cá, rau..." class="input-control">
+                    </div>
+                </div>
+
+                <button type="button" id="btnLuuChi" class="btn btn-red" style="width: 100%; font-size: 19px; padding: 14px;">
+                    ✅ GHI VÀO SỔ KHOẢN CHI NÀY (Hoặc ấn Enter)
+                </button>
+            </div>
+
+        </div>
+
+        <!-- MỤC 4: SỔ GHI CHÉP HÀNG NGÀY (HIỂN THỊ TRỰC TIẾP LUÔN, KHÔNG DÙNG TAB ẨN) -->
+        <div class="card" style="border: 2px solid #1D4ED8;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+                <div>
+                    <h2 style="font-size: 22px; font-weight: 800; color: #1E3A8A;">📝 4. SỔ GHI CHÉP HÀNG NGÀY (DANH SÁCH CÁC KHOẢN ĐÃ THU & ĐÃ CHI)</h2>
+                    <p style="font-size: 15px; color: #475569;">Mọi khoản Cô nhập ở trên đều tự động liệt kê chi tiết từng dòng ngay tại bảng này:</p>
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button type="button" id="btnXuatExcel" class="btn btn-blue" style="padding:10px 16px; font-size:16px;">📥 Xuất Ra File Excel (.CSV)</button>
+                    <button type="button" id="btnXoaThang" class="btn btn-gray" style="padding:10px 16px; font-size:16px; color:#DC2626;">🗑️ Xóa Làm Lại Tháng Này</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Loại Dòng Tiền</th>
+                            <th>Loại Tiền (Danh Mục)</th>
+                            <th style="text-align: right;">Số Tiền (VNĐ)</th>
+                            <th>Ghi Chú</th>
+                            <th style="text-align: center;">Xóa Dòng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTransactions">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MỤC 5: LỜI KHUYÊN TÀI CHÍNH AI & BIỂU ĐỒ TỶ TRỌNG CHI TIÊU (HIỂN THỊ TRỰC TIẾP) -->
+        <div class="grid-2">
+            <div class="card" style="border-top: 8px solid #F59E0B; background: #FFFBEB; margin-top: 0;">
+                <h3 style="font-size: 20px; font-weight: 800; color: #92400E; margin-bottom: 10px;">
+                    💡 5. CỐ VẤN TÀI CHÍNH AI (PHÂN TÍCH TỨC THÌ)
+                </h3>
+                <div id="aiAdviceContainer" style="font-size: 17px; color: #1E293B; background: #FFFFFF; padding: 16px; border-radius: 12px; border: 1px solid #FDE68A; line-height: 1.6;">
+                </div>
+
+                <!-- NHẬP NHANH BẰNG CÂU NÓI -->
+                <div style="margin-top: 16px; padding-top: 14px; border-top: 2px dashed #FCD34D;">
+                    <label for="aiQuickInput" style="font-weight: 800; color: #92400E; display: block; margin-bottom: 6px;">
+                        🤖 Hoặc gõ nhanh 1 câu nói để AI tự tách vào sổ:
+                    </label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <input type="text" id="aiQuickInput" placeholder="VD: Nhận lương 7 triệu, đi chợ 150k, tiền điện 400k" class="input-control" style="flex: 1; min-width: 200px; border-color: #F59E0B;">
+                        <button type="button" id="btnAiParse" class="btn btn-amber">✨ Tự Tách Vào Sổ</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 8px solid #2563EB; margin-top: 0;">
+                <h3 style="font-size: 20px; font-weight: 800; color: #1E3A8A; margin-bottom: 10px;">
+                    📊 6. THỐNG KÊ CÁC MỤC ĐÃ CHI TRONG THÁNG
+                </h3>
+                <div id="categoryBreakdownList" style="display: flex; flex-direction: column; gap: 12px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- MỤC 7: BẢNG TỔNG KẾT CẢ NĂM (HIỂN THỊ TRỰC TIẾP LUÔN) -->
+        <div class="card">
+            <h3 id="lblYearTitle" style="font-size: 21px; font-weight: 800; color: #1E3A8A; margin-bottom: 10px;">
+                📅 7. BẢNG TỔNG KẾT THU CHI CẢ NĂM
+            </h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tháng</th>
+                            <th style="text-align: right;">Tổng Tiền Vào (+ Dư đầu kỳ)</th>
+                            <th style="text-align: right;">Tổng Tiền Ra (Chi)</th>
+                            <th style="text-align: right;">Số Dư Cuối Tháng</th>
+                            <th style="text-align: center;">Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyYearSummary"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            // --- 1. LƯU TRỮ DỮ LIỆU AN TOÀN ---
+            var memStore = {};
+            function getStore(k) {
+                try { return localStorage.getItem(k); } catch (e) { return memStore[k] || null; }
+            }
+            function setStore(k, v) {
+                try { localStorage.setItem(k, v); } catch (e) { memStore[k] = v; }
+            }
+
+            var KEY_TX = "so_chi_tieu_v134_v4_tx";
+            var KEY_CARRY = "so_chi_tieu_v134_v4_carry";
+
+            var transactions = [];
+            var carryoverByMonth = {};
+
+            function getTodayStr() {
+                var d = new Date();
+                var yyyy = d.getFullYear();
+                var mm = String(d.getMonth() + 1).padStart(2, "0");
+                var dd = String(d.getDate()).padStart(2, "0");
+                return yyyy + "-" + mm + "-" + dd;
+            }
+
+            try {
+                var sTx = getStore(KEY_TX);
+                if (sTx) transactions = JSON.parse(sTx);
+                var sCarry = getStore(KEY_CARRY);
+                if (sCarry) carryoverByMonth = JSON.parse(sCarry);
+            } catch (e) {
+                transactions = [];
+                carryoverByMonth = {};
+            }
+
+            if (!Array.isArray(transactions)) transactions = [];
+            if (!carryoverByMonth || typeof carryoverByMonth !== "object") carryoverByMonth = {};
+
+            function saveData() {
+                setStore(KEY_TX, JSON.stringify(transactions));
+                setStore(KEY_CARRY, JSON.stringify(carryoverByMonth));
+            }
+
+            // --- 2. ĐỊNH DẠNG SỐ TIỀN ---
+            function formatVND(num) {
+                var n = Math.round(Number(num) || 0);
+                return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " đ";
+            }
+
+            function parseMoney(str) {
+                if (!str) return 0;
+                var clean = String(str).replace(/\D/g, "");
+                return parseInt(clean, 10) || 0;
+            }
+
+            function formatInputLive(inputEl) {
+                var raw = inputEl.value.replace(/\D/g, "");
+                if (!raw) {
+                    inputEl.value = "";
+                    return 0;
+                }
+                var num = parseInt(raw, 10) || 0;
+                inputEl.value = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return num;
+            }
+
+            function setStatus(msg) {
+                var el = document.getElementById("statusText");
+                if (el) el.innerText = msg;
+            }
+
+            // --- 3. TÍNH TOÁN & CẬP NHẬT SỐ DƯ TỨC THÌ NGAY KHI ĐANG GÕ ---
+            function renderAll(updateCarryInput) {
+                var filterEl = document.getElementById("filterMonth");
+                var ym = (filterEl && filterEl.value) ? filterEl.value : getTodayStr().slice(0, 7);
+                var year = ym.split("-")[0];
+
+                var carryEl = document.getElementById("inputSoDuDauKy");
+                if (updateCarryInput && carryEl) {
+                    var savedCarryVal = carryoverByMonth[ym] || 0;
+                    carryEl.value = savedCarryVal > 0 ? savedCarryVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";
+                }
+
+                // Đọc trực tiếp số tiền đang có trong ô Dư đầu kỳ, ô Đang gõ Thu, ô Đang gõ Chi
+                var duDauKy = carryEl ? parseMoney(carryEl.value) : (carryoverByMonth[ym] || 0);
+                carryoverByMonth[ym] = duDauKy;
+
+                var pendingThu = parseMoney(document.getElementById("thuAmount").value);
+                var pendingChi = parseMoney(document.getElementById("chiAmount").value);
+
+                // Lọc các giao dịch đã lưu trong tháng
+                var listThang = [];
+                for (var i = 0; i < transactions.length; i++) {
+                    var t = transactions[i];
+                    if (t && t.date && t.date.indexOf(ym) === 0) {
+                        listThang.push(t);
+                    }
+                }
+                listThang.sort(function(a, b) { return b.date.localeCompare(a.date); });
+
+                var savedThu = 0;
+                var savedChi = 0;
+                var soKhoanChi = 0;
+                var catMap = {};
+
+                var tbody = document.getElementById("tbodyTransactions");
+                tbody.innerHTML = "";
+
+                // 1. Dòng số dư đầu kỳ trên bảng
+                if (duDauKy > 0) {
+                    var trDu = document.createElement("tr");
+                    trDu.className = "row-du";
+                    trDu.innerHTML = '<td><b>' + ym + '-01</b></td>' +
+                        '<td><span class="badge badge-du">Số tiền dư đầu kỳ (+)</span></td>' +
+                        '<td><b>🏦 Tiền còn dư đầu tháng</b></td>' +
+                        '<td style="text-align: right; font-weight: 900; color: #1D4ED8;">+' + formatVND(duDauKy) + '</td>' +
+                        '<td>Tự động cộng vào tổng tiền vào</td>' +
+                        '<td style="text-align: center;">-</td>';
+                    tbody.appendChild(trDu);
+                }
+
+                // 2. Если đang gõ dở khoản Thu vào ô nhập -> Hiện luôn dòng nháp trên bảng để thấy ngay!
+                if (pendingThu > 0) {
+                    var catThuNow = document.getElementById("thuCategory").value;
+                    var dateThuNow = document.getElementById("thuDate").value || getTodayStr();
+                    var trPendingThu = document.createElement("tr");
+                    trPendingThu.style.background = "#FEF9C3";
+                    trPendingThu.innerHTML = '<td><b>' + dateThuNow + '</b></td>' +
+                        '<td><span class="badge badge-thu">Đang nhập Thu (+)</span></td>' +
+                        '<td><b>' + catThuNow + '</b></td>' +
+                        '<td style="text-align: right; font-weight: 900; color: #047857;">+' + formatVND(pendingThu) + '</td>' +
+                        '<td><i>(Đang gõ — Bấm nút Ghi Vào Sổ để lưu cố định)</i></td>' +
+                        '<td style="text-align: center;">⏳</td>';
+                    tbody.appendChild(trPendingThu);
+                }
+
+                // 3. Nếu đang gõ dở khoản Chi vào ô nhập -> Hiện luôn dòng nháp trên bảng để thấy ngay!
+                if (pendingChi > 0) {
+                    var catChiNow = document.getElementById("chiCategory").value;
+                    var dateChiNow = document.getElementById("chiDate").value || getTodayStr();
+                    var trPendingChi = document.createElement("tr");
+                    trPendingChi.style.background = "#FEF9C3";
+                    trPendingChi.innerHTML = '<td><b>' + dateChiNow + '</b></td>' +
+                        '<td><span class="badge badge-chi">Đang nhập Chi (-)</span></td>' +
+                        '<td><b>' + catChiNow + '</b></td>' +
+                        '<td style="text-align: right; font-weight: 900; color: #DC2626;">-' + formatVND(pendingChi) + '</td>' +
+                        '<td><i>(Đang gõ — Bấm nút Ghi Vào Sổ để lưu cố định)</i></td>' +
+                        '<td style="text-align: center;">⏳</td>';
+                    tbody.appendChild(trPendingChi);
+                }
+
+                // 4. Các dòng đã lưu chính thức trong sổ
+                for (var j = 0; j < listThang.length; j++) {
+                    var item = listThang[j];
+                    var isThu = item.type === "THU";
+                    if (isThu) {
+                        savedThu += item.amount;
+                    } else {
+                        savedChi += item.amount;
+                        soKhoanChi++;
+                        catMap[item.category] = (catMap[item.category] || 0) + item.amount;
+                    }
+
+                    var tr = document.createElement("tr");
+                    tr.className = isThu ? "row-thu" : "row-chi";
+                    tr.innerHTML = '<td style="font-weight: 700;">' + item.date + '</td>' +
+                        '<td><span class="badge ' + (isThu ? 'badge-thu' : 'badge-chi') + '">' + (isThu ? 'Dòng tiền vào (+)' : 'Dòng tiền ra (-)') + '</span></td>' +
+                        '<td style="font-weight: 700;">' + item.category + '</td>' +
+                        '<td style="text-align: right; font-weight: 900; color: ' + (isThu ? '#047857' : '#DC2626') + ';">' + (isThu ? '+' : '-') + formatVND(item.amount) + '</td>' +
+                        '<td>' + (item.note || '') + '</td>' +
+                        '<td style="text-align: center;"><button type="button" class="tag-btn btn-delete-row" data-id="' + item.id + '" style="background:#FEE2E2; color:#991B1B; border-color:#FCA5A5;">🗑️ Xóa</button></td>';
+                    tbody.appendChild(tr);
+                }
+
+                if (duDauKy === 0 && pendingThu === 0 && pendingChi === 0 && listThang.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px; color: #64748B;">Tháng ' + ym + ' chưa có khoản thu chi nào. Cô hãy gõ số tiền vào ô bên trên nhé!</td></tr>';
+                }
+
+                // TÍNH TỔNG TỨC THÌ (BAO GỒM CẢ SỐ ĐANG GÕ TRONG Ô ĐỂ NHẢY SỐ LUÔN)
+                var tongThuHienThi = duDauKy + savedThu + pendingThu;
+                var tongChiHienThi = savedChi + pendingChi;
+                var soDuCuoi = tongThuHienThi - tongChiHienThi;
+
+                document.getElementById("statTongThu").innerText = formatVND(tongThuHienThi);
+                document.getElementById("statChiTietThu").innerText = "Thu đã lưu: " + formatVND(savedThu) + " | Dư đầu kỳ: " + formatVND(duDauKy);
+
+                var liveThuEl = document.getElementById("liveThuPreview");
+                if (pendingThu > 0) {
+                    liveThuEl.style.display = "inline-block";
+                    liveThuEl.innerText = "⚡ Đang cộng trực tiếp số đang gõ: +" + formatVND(pendingThu);
+                } else {
+                    liveThuEl.style.display = "none";
+                }
+
+                document.getElementById("statTongChi").innerText = formatVND(tongChiHienThi);
+                document.getElementById("statSoKhoanChi").innerText = "Đã lưu " + soKhoanChi + " khoản chi trong tháng " + ym;
+
+                var liveChiEl = document.getElementById("liveChiPreview");
+                if (pendingChi > 0) {
+                    liveChiEl.style.display = "inline-block";
+                    liveChiEl.innerText = "⚡ Đang cộng trực tiếp số đang gõ: -" + formatVND(pendingChi);
+                } else {
+                    liveChiEl.style.display = "none";
+                }
+
+                var boxConLai = document.getElementById("boxConLai");
+                var statConLai = document.getElementById("statConLai");
+                var statDanhGia = document.getElementById("statDanhGia");
+
+                if (soDuCuoi >= 0) {
+                    boxConLai.className = "stat-box stat-du";
+                    statConLai.style.color = "#1D4ED8";
+                    statConLai.innerText = "+" + formatVND(soDuCuoi);
+                    statDanhGia.style.color = "#1E40AF";
+                    statDanhGia.innerText = soDuCuoi > 0 ? "✅ Rất tốt: Đang CÒN DƯ tiền!" : "⚖️ Vừa đủ: Thu chi cân bằng.";
+                } else {
+                    boxConLai.className = "stat-box stat-am";
+                    statConLai.style.color = "#E11D48";
+                    statConLai.innerText = "-" + formatVND(Math.abs(soDuCuoi));
+                    statDanhGia.style.color = "#9F1239";
+                    statDanhGia.innerText = "⚠️ Cảnh báo: Đang ÂM TIỀN (Chi vượt thu)!";
+                }
+
+                // Nếu đang gõ khoản chi, cộng tạm vào biểu đồ luôn
+                if (pendingChi > 0) {
+                    var cNow = document.getElementById("chiCategory").value;
+                    catMap[cNow] = (catMap[cNow] || 0) + pendingChi;
+                }
+
+                renderCategoryBars(catMap, tongChiHienThi);
+                renderYearTable(year);
+                renderAdvice(tongThuHienThi, tongChiHienThi, soDuCuoi, catMap);
+                saveData();
+            }
+
+            function renderCategoryBars(catMap, tongChi) {
+                var container = document.getElementById("categoryBreakdownList");
+                container.innerHTML = "";
+                var keys = Object.keys(catMap);
+                if (keys.length === 0) {
+                    container.innerHTML = '<p style="color:#64748B;">Chưa có khoản chi tiêu nào trong tháng này.</p>';
+                    return;
+                }
+                keys.sort(function(a, b) { return catMap[b] - catMap[a]; });
+                for (var i = 0; i < keys.length; i++) {
+                    var cat = keys[i];
+                    var amt = catMap[cat];
+                    var pct = tongChi > 0 ? ((amt / tongChi) * 100).toFixed(1) : 0;
+                    var div = document.createElement("div");
+                    div.style.padding = "10px 12px";
+                    div.style.border = "1px solid #CBD5E1";
+                    div.style.borderRadius = "10px";
+                    div.style.background = "#F8FAFC";
+                    div.innerHTML = '<div style="display:flex; justify-content:space-between; font-weight:800;">' +
+                        '<span>' + cat + '</span>' +
+                        '<span style="color:#DC2626;">' + formatVND(amt) + ' (' + pct + '%)</span>' +
+                        '</div>' +
+                        '<div class="bar-container"><div class="bar-fill" style="width:' + pct + '%;"></div></div>';
+                    container.appendChild(div);
+                }
+            }
+
+            function renderYearTable(year) {
+                document.getElementById("lblYearTitle").innerText = "📅 7. BẢNG TỔNG KẾT THU CHI CẢ NĂM " + year;
+                var tbody = document.getElementById("tbodyYearSummary");
+                tbody.innerHTML = "";
+                var caNamThu = 0;
+                var caNamChi = 0;
+
+                for (var m = 1; m <= 12; m++) {
+                    var mm = String(m).padStart(2, "0");
+                    var ym = year + "-" + mm;
+                    var thu = carryoverByMonth[ym] || 0;
+                    var chi = 0;
+                    for (var i = 0; i < transactions.length; i++) {
+                        var t = transactions[i];
+                        if (t && t.date && t.date.indexOf(ym) === 0) {
+                            if (t.type === "THU") thu += t.amount;
+                            else chi += t.amount;
+                        }
+                    }
+                    if (thu > 0 || chi > 0) {
+                        caNamThu += thu;
+                        caNamChi += chi;
+                        var duAm = thu - chi;
+                        var tr = document.createElement("tr");
+                        tr.innerHTML = '<td style="font-weight:800;">Tháng ' + mm + '/' + year + '</td>' +
+                            '<td style="text-align:right; color:#047857; font-weight:800;">' + formatVND(thu) + '</td>' +
+                            '<td style="text-align:right; color:#DC2626; font-weight:800;">' + formatVND(chi) + '</td>' +
+                            '<td style="text-align:right; font-weight:900; color:' + (duAm >= 0 ? '#1D4ED8' : '#E11D48') + ';">' + (duAm >= 0 ? '+' : '-') + formatVND(Math.abs(duAm)) + '</td>' +
+                            '<td style="text-align:center;"><span class="badge ' + (duAm >= 0 ? 'badge-thu' : 'badge-chi') + '">' + (duAm >= 0 ? 'Còn dư' : 'Bị âm') + '</span></td>';
+                        tbody.appendChild(tr);
+                    }
+                }
+
+                var duCaNam = caNamThu - caNamChi;
+                var trTotal = document.createElement("tr");
+                trTotal.style.background = "#DBEAFE";
+                trTotal.style.fontWeight = "900";
+                trTotal.innerHTML = '<td>TỔNG CẢ NĂM ' + year + '</td>' +
+                    '<td style="text-align:right; color:#065F46;">' + formatVND(caNamThu) + '</td>' +
+                    '<td style="text-align:right; color:#991B1B;">' + formatVND(caNamChi) + '</td>' +
+                    '<td style="text-align:right; color:' + (duCaNam >= 0 ? '#1E3A8A' : '#991B1B') + ';">' + (duCaNam >= 0 ? '+' : '-') + formatVND(Math.abs(duCaNam)) + '</td>' +
+                    '<td style="text-align:center;">' + (duCaNam >= 0 ? '🏆 DƯ DẢ' : '⚠️ BỘI CHI') + '</td>';
+                tbody.appendChild(trTotal);
+            }
+
+            function renderAdvice(thu, chi, soDu, catMap) {
+                var box = document.getElementById("aiAdviceContainer");
+                var maxCat = "Chưa có", maxAmt = 0;
+                for (var c in catMap) {
+                    if (catMap[c] > maxAmt) {
+                        maxAmt = catMap[c];
+                        maxCat = c;
+                    }
+                }
+                if (thu === 0 && chi === 0) {
+                    box.innerHTML = "👉 Cô hãy nhập <b>Số tiền dư đầu kỳ</b> hoặc <b>Dòng tiền vào / Dòng tiền ra</b> để hệ thống tự động tính toán và đưa ra lời khuyên tài chính.";
+                    return;
+                }
+                if (soDu < 0) {
+                    box.innerHTML = '<div style="color:#991B1B; background:#FEE2E2; padding:10px; border-radius:8px; margin-bottom:8px;"><b>🚨 Cảnh báo Âm Tiền:</b> Chi tiêu đang vượt tổng tiền vào <b>' + formatVND(Math.abs(soDu)) + '</b>!</div>' +
+                        '• Mục tốn tiền nhất hiện tại: <b>' + maxCat + '</b> (' + formatVND(maxAmt) + ').<br>' +
+                        '• <b>Tư vấn:</b> Hãy ưu tiên các khoản thiết yếu (ăn uống, sức khỏe, điện nước) và tạm dừng mua sắm chưa cấp thiết.';
+                } else {
+                    var pct = thu > 0 ? ((soDu / thu) * 100).toFixed(1) : 0;
+                    box.innerHTML = '<div style="color:#065F46; background:#DCFCE7; padding:10px; border-radius:8px; margin-bottom:8px;"><b>✅ Dòng Tiền Dương An Toàn:</b> Hiện đang còn dư <b>' + formatVND(soDu) + '</b> (Giữ lại được ' + pct + '% tổng tiền).</div>' +
+                        '• Mục chi lớn nhất: <b>' + maxCat + '</b> (' + formatVND(maxAmt) + ').<br>' +
+                        '• <b>Tư vấn 50/30/20:</b> Nên duy trì tỷ lệ tiết kiệm từ 20% - 30% tổng thu vào quỹ dự phòng sức khỏe & tích lũy dài hạn.';
+                }
+            }
+
+            // --- 4. HÀM LƯU KHOẢN THU & CHI CHÍNH THỨC VÀO SỔ ---
+            function saveThuEntry() {
+                var amt = parseMoney(document.getElementById("thuAmount").value);
+                if (amt <= 0) {
+                    setStatus("⚠️ Cô hãy gõ Số tiền thu vào (ví dụ: 5.000.000) trước khi bấm Ghi vào sổ nhé!");
+                    document.getElementById("thuAmount").focus();
+                    return;
+                }
+                var cat = document.getElementById("thuCategory").value;
+                var date = document.getElementById("thuDate").value || getTodayStr();
+                var note = document.getElementById("thuNote").value.trim() || cat;
+
+                transactions.push({
+                    id: "tx_" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000),
+                    date: date,
+                    type: "THU",
+                    category: cat,
+                    amount: amt,
+                    note: note
+                });
+
+                document.getElementById("filterMonth").value = date.slice(0, 7);
+                document.getElementById("thuAmount").value = "";
+                document.getElementById("thuNote").value = "";
+
+                renderAll(false);
+                setStatus("🎉 Đã lưu cố định khoản Thu +" + formatVND(amt) + " (" + cat + ") vào Sổ Ghi Chép!");
+            }
+
+            function saveChiEntry() {
+                var amt = parseMoney(document.getElementById("chiAmount").value);
+                if (amt <= 0) {
+                    setStatus("⚠️ Cô hãy gõ Số tiền chi ra (ví dụ: 180.000) trước khi bấm Ghi vào sổ nhé!");
+                    document.getElementById("chiAmount").focus();
+                    return;
+                }
+                var cat = document.getElementById("chiCategory").value;
+                var date = document.getElementById("chiDate").value || getTodayStr();
+                var note = document.getElementById("chiNote").value.trim() || cat;
+
+                transactions.push({
+                    id: "tx_" + new Date().getTime() + "_" + Math.floor(Math.random() * 1000),
+                    date: date,
+                    type: "CHI",
+                    category: cat,
+                    amount: amt,
+                    note: note
+                });
+
+                document.getElementById("filterMonth").value = date.slice(0, 7);
+                document.getElementById("chiAmount").value = "";
+                document.getElementById("chiNote").value = "";
+
+                renderAll(false);
+                setStatus("🎉 Đã lưu cố định khoản Chi -" + formatVND(amt) + " (" + cat + ") vào Sổ Ghi Chép!");
+            }
+
+            // --- 5. GẮN SỰ KIỆN TRỰC TIẾP (KHÔNG DÙNG ONCLICK NỘI TUYẾN ĐỂ CHỐNG CHẶN CSP TRONG KHUNG PREVIEW) ---
+            function bindEvents() {
+                var today = getTodayStr();
+                document.getElementById("filterMonth").value = today.slice(0, 7);
+                document.getElementById("thuDate").value = today;
+                document.getElementById("chiDate").value = today;
+
+                // Khi gõ vào ô Số tiền dư đầu kỳ -> Nhảy số tổng ngay lập tức!
+                var carryInput = document.getElementById("inputSoDuDauKy");
+                carryInput.addEventListener("input", function() {
+                    formatInputLive(this);
+                    renderAll(false);
+                    setStatus("⚡ Đã tự động cập nhật Số Tiền Dư Đầu Kỳ vào Tổng Tiền Vào và Số Dư!");
+                });
+
+                document.getElementById("btnXoaDuDauKy").addEventListener("click", function() {
+                    carryInput.value = "0";
+                    renderAll(false);
+                    setStatus("Đã đặt Số tiền dư đầu kỳ về 0 đ.");
+                });
+
+                // Khi gõ vào ô Tiền Thu -> Nhảy số Tổng Tiền Vào và Số Dư ngay lập tức!
+                var thuInput = document.getElementById("thuAmount");
+                thuInput.addEventListener("input", function() {
+                    formatInputLive(this);
+                    renderAll(false);
+                });
+                thuInput.addEventListener("keydown", function(e) {
+                    if (e.key === "Enter") { e.preventDefault(); saveThuEntry(); }
+                });
+                document.getElementById("thuCategory").addEventListener("change", function() {
+                    renderAll(false);
+                });
+                document.getElementById("thuDate").addEventListener("change", function() {
+                    if (this.value) {
+                        document.getElementById("filterMonth").value = this.value.slice(0, 7);
+                        renderAll(true);
+                    }
+                });
+
+                // Khi gõ vào ô Tiền Chi -> Nhảy số Tổng Tiền Ra và Số Dư ngay lập tức!
+                var chiInput = document.getElementById("chiAmount");
+                chiInput.addEventListener("input", function() {
+                    formatInputLive(this);
+                    renderAll(false);
+                });
+                chiInput.addEventListener("keydown", function(e) {
+                    if (e.key === "Enter") { e.preventDefault(); saveChiEntry(); }
+                });
+                document.getElementById("chiCategory").addEventListener("change", function() {
+                    renderAll(false);
+                });
+                document.getElementById("chiDate").addEventListener("change", function() {
+                    if (this.value) {
+                        document.getElementById("filterMonth").value = this.value.slice(0, 7);
+                        renderAll(true);
+                    }
+                });
+
+                // Nút Ghi vào sổ
+                document.getElementById("btnLuuThu").addEventListener("click", saveThuEntry);
+                document.getElementById("btnLuuChi").addEventListener("click", saveChiEntry);
+
+                // Các nút Chọn nhanh mức tiền (500.000, 1.000.000, 50.000...)
+                var quickBtns = document.querySelectorAll(".tag-btn[data-target]");
+                for (var i = 0; i < quickBtns.length; i++) {
+                    quickBtns[i].addEventListener("click", function() {
+                        var targetId = this.getAttribute("data-target");
+                        var val = this.getAttribute("data-val");
+                        var inputEl = document.getElementById(targetId);
+                        if (inputEl) {
+                            inputEl.value = val;
+                            renderAll(false);
+                            setStatus("⚡ Đã chọn mức tiền " + val + " đ — Tổng tiền và Số dư phía trên đã nhảy số ngay!");
+                        }
+                    });
+                }
+
+                // Đổi tháng xem sổ
+                document.getElementById("filterMonth").addEventListener("change", function() {
+                    renderAll(true);
+                });
+                document.getElementById("btnVeThangNay").addEventListener("click", function() {
+                    var t = getTodayStr();
+                    document.getElementById("filterMonth").value = t.slice(0, 7);
+                    document.getElementById("thuDate").value = t;
+                    document.getElementById("chiDate").value = t;
+                    renderAll(true);
+                    setStatus("Đã chuyển về tháng hiện tại.");
+                });
+
+                // Xóa từng dòng trong bảng sổ
+                document.getElementById("tbodyTransactions").addEventListener("click", function(e) {
+                    var btn = e.target.closest(".btn-delete-row");
+                    if (btn) {
+                        var id = btn.getAttribute("data-id");
+                        var next = [];
+                        for (var k = 0; k < transactions.length; k++) {
+                            if (transactions[k].id !== id) next.push(transactions[k]);
+                        }
+                        transactions = next;
+                        renderAll(false);
+                        setStatus("🗑️ Đã xóa dòng ghi chép và tính lại số dư!");
+                    }
+                });
+
+                // Xóa làm lại tháng này
+                document.getElementById("btnXoaThang").addEventListener("click", function() {
+                    var ym = document.getElementById("filterMonth").value;
+                    var next = [];
+                    for (var k = 0; k < transactions.length; k++) {
+                        if (transactions[k].date.indexOf(ym) !== 0) next.push(transactions[k]);
+                    }
+                    transactions = next;
+                    carryoverByMonth[ym] = 0;
+                    document.getElementById("inputSoDuDauKy").value = "0";
+                    document.getElementById("thuAmount").value = "";
+                    document.getElementById("chiAmount").value = "";
+                    renderAll(false);
+                    setStatus("🗑️ Đã đặt lại toàn bộ số liệu tháng " + ym + " về 0 đ!");
+                });
+
+                // Xuất file Excel CSV
+                document.getElementById("btnXuatExcel").addEventListener("click", function() {
+                    var ym = document.getElementById("filterMonth").value || getTodayStr().slice(0, 7);
+                    var duDau = carryoverByMonth[ym] || 0;
+                    var nl = String.fromCharCode(13, 10);
+                    var csv = "\uFEFFBÁO CÁO THU CHI THÁNG " + ym + nl;
+                    csv += "Ngày,Loại,Danh mục,Số tiền (VNĐ),Ghi chú" + nl;
+                    if (duDau > 0) {
+                        csv += '"' + ym + '-01","Dư đầu kỳ","Tiền dư tháng trước chuyển sang",' + duDau + ',"Quỹ đầu tháng"' + nl;
+                    }
+                    for (var i = 0; i < transactions.length; i++) {
+                        var item = transactions[i];
+                        if (item.date && item.date.indexOf(ym) === 0) {
+                            var loai = item.type === "THU" ? "Tiền vào" : "Tiền chi";
+                            var noteClean = (item.note || "").replace(/"/g, '""');
+                            csv += '"' + item.date + '","' + loai + '","' + item.category + '",' + item.amount + ',"' + noteClean + '"' + nl;
+                        }
+                    }
+                    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement("a");
+                    a.href = url;
+                    a.download = "So_Thu_Chi_" + ym + ".csv";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setStatus("📥 Đã tải xuống file Excel (.CSV) của tháng " + ym + "!");
+                });
+
+                // AI tự tách câu nói
+                document.getElementById("btnAiParse").addEventListener("click", function() {
+                    var raw = document.getElementById("aiQuickInput").value.trim();
+                    if (!raw) return;
+                    var segments = raw.split(/[,;]/);
+                    var todayStr = getTodayStr();
+                    var count = 0;
+                    for (var i = 0; i < segments.length; i++) {
+                        var seg = segments[i].trim();
+                        if (!seg) continue;
+                        var lower = seg.toLowerCase();
+                        var amount = 0;
+                        var trRuoi = lower.match(/(\d+)\s*(?:triệu|tr)\s*rưỡi/);
+                        var trMatch = lower.match(/(\d+(?:[\.,]\d+)?)\s*(?:triệu|tr)/);
+                        var kMatch = lower.match(/(\d+(?:[\.,]\d+)?)\s*(?:k|nghìn|ngàn)/);
+                        var rawNum = lower.match(/(\d{1,3}(?:[\.,]\d{3})+|\d{4,})/);
+
+                        if (trRuoi) amount = parseInt(trRuoi[1], 10) * 1000000 + 500000;
+                        else if (trMatch) amount = Math.round(parseFloat(trMatch[1].replace(",", ".")) * 1000000);
+                        else if (kMatch) amount = Math.round(parseFloat(kMatch[1].replace(",", ".")) * 1000);
+                        else if (rawNum) amount = parseInt(rawNum[1].replace(/[\.,]/g, ""), 10);
+
+                        if (amount > 0) {
+                            var type = "CHI";
+                            if (lower.indexOf("lương") >= 0 || lower.indexOf("thu") >= 0 || lower.indexOf("biếu") >= 0 || lower.indexOf("nhận") >= 0) {
+                                type = "THU";
+                            }
+                            var category = type === "THU" ? "Lương / Phụ cấp" : "Ăn uống, Đi chợ";
+                            if (type === "CHI") {
+                                if (lower.indexOf("điện") >= 0 || lower.indexOf("nước") >= 0) category = "Điện, Nước, Gas, Mạng";
+                                else if (lower.indexOf("thuốc") >= 0 || lower.indexOf("khám") >= 0) category = "Thuốc men, Sức khỏe";
+                                else if (lower.indexOf("cưới") >= 0 || lower.indexOf("mừng") >= 0) category = "Hiếu hỉ, Đám cưới, Quà cáp";
+                                else if (lower.indexOf("xăng") >= 0 || lower.indexOf("xe") >= 0) category = "Xăng xe, Đi lại";
+                            }
+                            transactions.push({
+                                id: "tx_" + new Date().getTime() + "_" + i,
+                                date: todayStr,
+                                type: type,
+                                category: category,
+                                amount: amount,
+                                note: seg
+                            });
+                            count++;
+                        }
+                    }
+                    if (count > 0) {
+                        document.getElementById("aiQuickInput").value = "";
+                        renderAll(false);
+                        setStatus("✨ AI đã tự động tách và ghi " + count + " khoản vào Sổ Ghi Chép!");
+                    }
+                });
+
+                renderAll(true);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", bindEvents);
+            } else {
+                bindEvents();
+            }
+        })();
+    </script>
+</body>
+</html>
